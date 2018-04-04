@@ -44,7 +44,6 @@ class Maze():
         self.start_pos = (0, 0)
         self.goal_pos = (0, 4)
         self.goal = (96, 104)
-        # self.map = np.asarray(["SWFWG","OOOOO","WOOOW","FOWFW"], dtype='c')
         self.map = np.asarray(["SWFWG", "OOOOO", "WOOOW", "FOWFW"])
         self.img_map = np.ones(self.dim)
         for x in Maze.obstacles:
@@ -58,26 +57,24 @@ class Maze():
         # Input: the current state and action IDs
         # Output: reward, the next state ID, done (episodic terminal boolean value)
 
-        if np.random.rand() < self.slip:
-            a = ACTMAP[action]
-        else:
-            a = action
+        # if np.random.rand() < self.slip:
+        #     action = ACTMAP[action]
 
         cell = self.idx2cell[int(state / 8)]
-        if a == 0:
+        if action == 0:
             c_next = cell[1]
             r_next = max(0, cell[0] - 1)
-        elif a == 1:
+        elif action == 1:
             c_next = cell[1]
             r_next = min(self.dim[0] - 1, cell[0] + 1)
-        elif a == 2:
+        elif action == 2:
             c_next = max(0, cell[1] - 1)
             r_next = cell[0]
-        elif a == 3:
+        elif action == 3:
             c_next = min(self.dim[1] - 1, cell[1] + 1)
             r_next = cell[0]
         else:
-            print(action, a)
+            print(action)
             raise ValueError
 
         if (r_next == self.goal_pos[0]) and (c_next == self.goal_pos[1]):  # Reach the exit
@@ -122,6 +119,19 @@ class Maze():
 
         print("action: ", ["UP", "DOWN", "LEFT", "RIGHT"][action] if action is not None else None)
         print("\n".join("".join(row) for row in desc))
+
+    def getTransitionsAndRewards(self, state, action):
+        # Output: a list of reward, next state and probability
+        results =[]
+        # slip transition
+        slip_action = ACTMAP[action]
+        slip_reward, slip_next_state, _ = self.step(state,slip_action)
+        results.append((slip_reward, slip_next_state, self.slip))
+        # normal transition
+        normal_reward, normal_next_state, _ = self.step(state, action)
+        results.append((normal_reward, normal_next_state, 1-self.slip))
+        return results
+
 
 
 if __name__ == '__main__':
