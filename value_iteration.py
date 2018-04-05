@@ -6,10 +6,10 @@ class ValueIterationAgent(object):
     """
         Adopted from http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
         A Agent takes a MDP and runs value iteration using a discount factor
-        for a given number of iterations or until convergence
+        for a given number of iterations
     """
 
-    def __init__(self, mdp, discount=0.9, iterations=100):
+    def __init__(self, mdp, discount=0.9, iterations=1000):
         self.mdp = mdp
         self.discount = discount
         self.iterations = iterations
@@ -21,13 +21,11 @@ class ValueIterationAgent(object):
             temp_value = np.zeros(self.mdp.snum)
             for state in range(self.mdp.snum):
                 if self.mdp.idx2cell[int(state/8)] == self.mdp.goal_pos: # terminal state
-                    temp_value[state] = 0
                     continue
                 max_value = float('-inf')
                 for action in range(self.mdp.anum):
                     total_value = self.getQValue(state, action)
-                    if total_value > max_value:
-                        max_value = total_value
+                    max_value = max(max_value, total_value)
                 temp_value[state] = max_value
             self.values = np.copy(temp_value)  # update for next iteration
 
