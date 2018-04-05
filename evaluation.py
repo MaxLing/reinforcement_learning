@@ -6,7 +6,10 @@ import numpy as np
 
 def get_action_egreedy(values ,epsilon):
 	# Implement epsilon greedy action policy
-	NotImplementedError
+	if np.random.random() < epsilon:
+		return np.random.randint(0,len(values))
+	else:
+		return np.argmax(values)
 
 def evaluation(env, Q_table, step_bound = 100, num_itr = 10):
 	"""
