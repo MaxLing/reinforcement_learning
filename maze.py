@@ -53,12 +53,12 @@ class Maze():
         self.cell2idx = {(1, 2): 7, (0, 0): 0, (3, 3): 11, (3, 0): 2, (3, 1): 5, (2, 1): 4,
                          (0, 2): 6, (1, 3): 9, (2, 3): 10, (1, 4): 13, (2, 2): 8, (0, 4): 12, (1, 0): 1, (1, 1): 3}
 
-    def step(self, state, action):
+    def step(self, state, action, slip = False):
         # Input: the current state and action IDs
         # Output: reward, the next state ID, done (episodic terminal boolean value)
-
-        # if np.random.rand() < self.slip:
-        #     action = ACTMAP[action]
+        if slip:
+            if np.random.rand() < self.slip:
+                action = ACTMAP[action]
 
         cell = self.idx2cell[int(state / 8)]
         if action == 0:
@@ -132,6 +132,9 @@ class Maze():
         results.append((normal_reward, normal_next_state, 1-self.slip))
         return results
 
+    def getLegalActions(self, state):
+        # Output: a list of legal actions at current state
+        return np.arange(self.anum).tolist()
 
 
 if __name__ == '__main__':
