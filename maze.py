@@ -53,7 +53,7 @@ class Maze():
         self.cell2idx = {(1, 2): 7, (0, 0): 0, (3, 3): 11, (3, 0): 2, (3, 1): 5, (2, 1): 4,
                          (0, 2): 6, (1, 3): 9, (2, 3): 10, (1, 4): 13, (2, 2): 8, (0, 4): 12, (1, 0): 1, (1, 1): 3}
 
-    def step(self, state, action, slip = False):
+    def step(self, state, action, slip = True):
         # Input: the current state and action IDs
         # Output: reward, the next state ID, done (episodic terminal boolean value)
         if slip:
@@ -122,13 +122,13 @@ class Maze():
 
     def getTransitionsAndRewards(self, state, action):
         # Output: a list of reward, next state and probability
-        results =[]
+        results = []
         # slip transition
         slip_action = ACTMAP[action]
-        slip_reward, slip_next_state, _ = self.step(state,slip_action)
+        slip_reward, slip_next_state, _ = self.step(state,slip_action, slip=False)
         results.append((slip_reward, slip_next_state, self.slip))
         # normal transition
-        normal_reward, normal_next_state, _ = self.step(state, action)
+        normal_reward, normal_next_state, _ = self.step(state, action, slip=False)
         results.append((normal_reward, normal_next_state, 1-self.slip))
         return results
 

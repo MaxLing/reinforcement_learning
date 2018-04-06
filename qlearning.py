@@ -80,7 +80,7 @@ if __name__ == '__main__':
         done = False
         while not done:
             action = agent.getAction(state)
-            reward, next_state, done = maze.step(state, action, slip=True)
+            reward, next_state, done = maze.step(state, action)
             agent.learn(state, action, next_state, reward)
             state = next_state
 
@@ -99,5 +99,5 @@ if __name__ == '__main__':
     ax2.set(ylabel='reward')
     ax3.plot(np.arange(iterations), eval_RMSE)
     ax3.set(ylabel='RMSE', xlabel='episodes')
-    plt.show()
+    plt.savefig('qlearning.png')
     # value_plot(dict2array(agent.qvalues, maze.snum, maze.anum), maze)
