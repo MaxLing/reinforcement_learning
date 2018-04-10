@@ -6,7 +6,6 @@ import random
 
 class QLearningAgent(object):
     """
-        Adopted from http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
         A model-free Temporal Difference learning agent
     """
     def __init__(self, get_legal_actions, discount=0.9, learn_rate=0.2, explore_rate=0.5):
@@ -50,7 +49,7 @@ class QLearningAgent(object):
         else:
             return self.getPolicy(state)
 
-    def learn(self, state, action, next_state, reward):
+    def update(self, state, action, next_state, reward):
         q_value_current = self.getQValue(state, action)
         q_value_sample = reward + self.discount * self.getValue(next_state)
         self.qvalues[(state, action)] = (1 - self.learn_rate) * q_value_current + self.learn_rate * q_value_sample
@@ -81,7 +80,7 @@ if __name__ == '__main__':
         while not done:
             action = agent.getAction(state)
             reward, next_state, done = maze.step(state, action)
-            agent.learn(state, action, next_state, reward)
+            agent.update(state, action, next_state, reward)
             state = next_state
 
         q_current = dict2array(agent.qvalues, maze.snum, maze.anum)

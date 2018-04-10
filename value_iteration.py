@@ -4,7 +4,6 @@ import numpy as np
 
 class ValueIterationAgent(object):
     """
-        Adopted from http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
         A Agent takes a MDP and runs value iteration using a discount factor
         for a given number of iterations
     """
